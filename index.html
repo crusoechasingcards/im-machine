@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA Card Box Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      margin: 20px;
+      cursor: pointer;
+    }
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>NBA Card Box Simulator</h1>
+  <button onclick="openBox()">🎴 Open Box</button>
+  <div class="cards" id="cards"></div>
+
+  <script>
+    // Примерный список карт (в реальности ты загрузишь из файла или сервера)
+    const allCards = [
+      { player: "LeBron James", team: "Lakers", type: "auto", quantity: 15 },
+      { player: "Stephen Curry", team: "Warriors", type: "patch", quantity: 30 },
+      { player: "Jayson Tatum", team: "Celtics", type: "patch", quantity: 10 },
+      { player: "Luka Doncic", team: "Mavericks", type: "auto", quantity: 5 },
+      { player: "Victor Wembanyama", team: "Spurs", type: "base", quantity: 100 },
+      { player: "Giannis Antetokounmpo", team: "Bucks", type: "base", quantity: 80 },
+      { player: "Nikola Jokic", team: "Nuggets", type: "base", quantity: 75 },
+      { player: "Kevin Durant", team: "Suns", type: "auto", quantity: 12 },
+      { player: "Zion Williamson", team: "Pelicans", type: "patch", quantity: 20 }
+    ];
+
+    function weightedRandom(cards, count, type) {
+      const filtered = cards.filter(c => c.type === type);
+      const total = filtered.reduce((sum, c) => sum + c.quantity, 0);
+      const result = [];
+      while (result.length < count && filtered.length > 0) {
+        let r = Math.random() * total;
+        for (let card of filtered) {
+          if (r < card.quantity) {
+            result.push(card);
+            filtered.splice(filtered.indexOf(card), 1);
+            break;
+          }
+          r -= card.quantity;
+        }
+      }
+      return result;
+    }
+
+    function openBox() {
+      const base = weightedRandom(allCards, 1, "base");
+      const patch = weightedRandom(allCards, 2, "patch");
+      const auto = weightedRandom(allCards, 3, "auto");
+      const cards = [...base, ...patch, ...auto];
+      const container = document.getElementById("cards");
+      container.innerHTML = "";
+      cards.forEach(card => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `<strong>${card.player}</strong> (${card.team})<br>Type: ${card.type}`;
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
