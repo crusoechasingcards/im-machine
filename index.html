@@ -77,7 +77,7 @@
   <h1>NBA Cards Break Simulator</h1>
   <button onclick="openBox()">🎴 Open Box</button>
   <div class="cards" id="cards"></div>
-  <div class="build">Build: 2025-04-18</div>
+  <div class="build">Build: 2025-04-18 00:49</div>
 
   <script src="base.js"></script>
   <script src="patch.js"></script>
@@ -125,7 +125,7 @@
               <div class="type-tag">${card.Type.toLowerCase()}</div>
             </div>
             <div>${card["Card Set"]}</div>
-            <div class="quantity-tag">/${card.Quantity}</div>
+            ${card.Player === 'Random player' ? '' : `<div class="quantity-tag">/${card.Quantity}</div>`}
           `;
           container.appendChild(div);
         }, delay);
