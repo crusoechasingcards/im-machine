@@ -47,19 +47,23 @@
     }
     .player-team {
       flex: 1;
-      padding-right: 10px;
+      padding-right: 14px;
       word-break: break-word;
+      overflow-wrap: break-word;
     }
     .type-tag {
       font-weight: bold;
+      font-size: 12px;
       color: #0047AB;
       white-space: nowrap;
+      text-transform: lowercase;
     }
     .quantity-tag {
       position: absolute;
       bottom: 10px;
       right: 14px;
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: bold;
       color: #888;
     }
     .build {
@@ -70,10 +74,10 @@
   </style>
 </head>
 <body>
-  <h1>NBA Card Box Simulator</h1>
+  <h1>NBA Cards Break Simulator</h1>
   <button onclick="openBox()">🎴 Open Box</button>
   <div class="cards" id="cards"></div>
-  <div class="build">Build: 2025-04-18 00:15</div>
+  <div class="build">Build: 2025-04-18</div>
 
   <script src="base.js"></script>
   <script src="patch.js"></script>
@@ -118,7 +122,7 @@
           div.innerHTML = `
             <div class="card-header">
               <div class="player-team"><strong>${card.Player}</strong> (${card.Team})</div>
-              <div class="type-tag">${card.Type.toUpperCase()}</div>
+              <div class="type-tag">${card.Type.toLowerCase()}</div>
             </div>
             <div>${card["Card Set"]}</div>
             <div class="quantity-tag">/${card.Quantity}</div>
