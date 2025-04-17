@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NBA Card Box Simulator</title>
+  <title>NBA Cards Break Simulator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -37,43 +37,51 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       text-align: left;
     }
+    .build {
+      font-size: 12px;
+      color: #888;
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
-  <div style="font-size:12px; color:#999; margin-top:20px">
-    Build: 2025-04-18 22:30
-  </div>
   <h1>NBA Card Box Simulator</h1>
   <button onclick="openBox()">🎴 Open Box</button>
   <div class="cards" id="cards"></div>
+  <div class="build">Build: 2025-04-17 23:44</div>
 
   <script src="base.js"></script>
   <script src="patch.js"></script>
   <script src="auto.js"></script>
 
   <script>
-    function weightedRandom(cards, count) {
-      const total = cards.reduce((sum, c) => sum + c.Quantity, 0);
+    function weightedRandomCDF(cards, count) {
       const result = [];
-      const source = [...cards];
-      while (result.length < count && source.length > 0) {
-        let r = Math.random() * total;
-        for (let card of source) {
-          if (r < card.Quantity) {
-            result.push(card);
-            source.splice(source.indexOf(card), 1);
-            break;
+      const usedIndexes = new Set();
+      while (result.length < count) {
+        const r = Math.random();
+        let low = 0;
+        let high = cards.length - 1;
+        while (low < high) {
+          const mid = Math.floor((low + high) / 2);
+          if (cards[mid].CDF < r) {
+            low = mid + 1;
+          } else {
+            high = mid;
           }
-          r -= card.Quantity;
+        }
+        if (!usedIndexes.has(low)) {
+          result.push(cards[low]);
+          usedIndexes.add(low);
         }
       }
       return result;
     }
 
     function openBox() {
-      const base = weightedRandom(baseCards, 1);
-      const patch = weightedRandom(patchCards, 2);
-      const auto = weightedRandom(autoCards, 3);
+      const base = weightedRandomCDF(baseCards, 1);
+      const patch = weightedRandomCDF(patchCards, 2);
+      const auto = weightedRandomCDF(autoCards, 3);
       const cards = [...base, ...patch, ...auto];
       const container = document.getElementById("cards");
       container.innerHTML = "";
