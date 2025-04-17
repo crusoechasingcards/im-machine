@@ -9,11 +9,12 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background: #f0f0f0;
+      background: #002D62;
       padding: 40px;
+      color: white;
     }
     h1 {
-      color: #333;
+      color: #fff;
     }
     button {
       padding: 12px 24px;
@@ -33,13 +34,29 @@
     .card {
       background: white;
       border-radius: 10px;
-      padding: 10px;
+      padding: 10px 14px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       text-align: left;
+      position: relative;
+      color: black;
+    }
+    .type-tag {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-weight: bold;
+      color: #0047AB;
+    }
+    .quantity-tag {
+      position: absolute;
+      bottom: 10px;
+      right: 14px;
+      font-size: 12px;
+      color: #888;
     }
     .build {
       font-size: 12px;
-      color: #888;
+      color: #ccc;
       margin-top: 30px;
     }
   </style>
@@ -48,7 +65,7 @@
   <h1>NBA Card Box Simulator</h1>
   <button onclick="openBox()">🎴 Open Box</button>
   <div class="cards" id="cards"></div>
-  <div class="build">Build: 2025-04-17 23:44</div>
+  <div class="build">Build: 2025-04-18</div>
 
   <script src="base.js"></script>
   <script src="patch.js"></script>
@@ -85,11 +102,20 @@
       const cards = [...base, ...patch, ...auto];
       const container = document.getElementById("cards");
       container.innerHTML = "";
-      cards.forEach(card => {
+      
+      let delay = 0;
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+    
         const div = document.createElement("div");
         div.className = "card";
-        div.innerHTML = `<strong>${card.Player}</strong> (${card.Team})<br>Set: ${card["Card Set"]}<br>Type: ${card.Type}`;
-        container.appendChild(div);
+        div.innerHTML = `
+          <div class="type-tag">${card.Type.toUpperCase()}</div>
+          <div><strong>${card.Player}</strong> (${card.Team})</div>
+          <div>${card["Card Set"]}</div>
+          <div class="quantity-tag">/${card.Quantity}</div>
+        `;
+        container.appendChild(div); }, delay); delay += 1000;
       });
     }
   </script>
