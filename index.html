@@ -82,6 +82,10 @@
 </head>
 <body>
   <h1>NBA Cards Break Simulator</h1>
+  <div style="margin-bottom: 10px;">
+    <label for="fotl-toggle" style="font-size: 14px; margin-right: 10px;">FOTL</label>
+    <input type="checkbox" id="fotl-toggle" />
+  </div>
   <button onclick="openBox()">🎴 Open Box</button>
   <div class="cards" id="cards"></div>
   <div class="build">Build: 2025-04-18</div>
@@ -115,9 +119,13 @@
     }
 
     function openBox() {
-      const base = weightedRandomCDF(baseCards, 1);
-      const patch = weightedRandomCDF(patchCards, 2);
-      const auto = weightedRandomCDF(autoCards, 3);
+      const fotlEnabled = document.getElementById("fotl-toggle").checked;
+      const basePool = fotlEnabled ? baseCards : baseCards.filter(c => !c["Card Set"].includes("FOTL"));
+      const patchPool = fotlEnabled ? patchCards : patchCards.filter(c => !c["Card Set"].includes("FOTL"));
+      const autoPool = fotlEnabled ? autoCards : autoCards.filter(c => !c["Card Set"].includes("FOTL"));
+      const base = weightedRandomCDF(basePool, 1);
+      const patch = weightedRandomCDF(patchPool, 2);
+      const auto = weightedRandomCDF(autoPool, 3);
       const cards = [...base, ...patch, ...auto];
       const container = document.getElementById("cards");
       container.innerHTML = "";
