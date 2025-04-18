@@ -78,14 +78,58 @@
       color: #ccc;
       margin-top: 30px;
     }
+  
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
   </style>
 </head>
 <body>
   <h1>NBA Cards Break Simulator</h1>
+  
   <div style="margin-bottom: 10px;">
-    <label for="fotl-toggle" style="font-size: 14px; margin-right: 10px;">FOTL</label>
-    <input type="checkbox" id="fotl-toggle" />
+    <label style="font-size: 14px; margin-right: 10px;">FOTL</label>
+    <label class="switch">
+      <input type="checkbox" id="fotl-toggle">
+      <span class="slider round"></span>
+    </label>
   </div>
+  
   <button onclick="openBox()">🎴 Open Box</button>
   <div class="cards" id="cards"></div>
   <div class="build">Build: 2025-04-18</div>
